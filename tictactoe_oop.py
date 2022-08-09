@@ -1,10 +1,16 @@
 # tictactoe_oop.py, an object-oriented tic-tac-toe game.
+import copy
+
+from ticTacToeNon_oop import isWinner
 ALL_SPACES = list('123456789') # The keys for a TTT board.
 X, O, BLANK = 'X', 'O', ' ' # Constants for string values.
 def main():
     """Runs a game of tic-tac-toe."""
     print('Welcome to tic-tac-toe!')
-    gameBoard = TTTBoard() # Create a TTT board object.
+    if input('Use mini board? Y/N: ').lower().startswith('y'):
+        gameBoard = MiniBoard()  # Create a miniboard object.
+    else:
+        gameBoard = TTTBoard() # Create a TTT board object.
     currentPlayer, nextPlayer = X, O # X goes first, O goes next.
     while True:
         print(gameBoard.getBoardStr()) # Display the board on the screen.
@@ -69,3 +75,20 @@ class TTTBoard:
         self._spaces[space] = player
 if __name__ == '__main__':
     main() # Call main() if this module is run, but not when imported.
+class MiniBoard(TTTBoard):
+    def getBoardStr(self):
+        """Return a tiny-representation of the board."""
+        # Change blank spaces to a "."
+        for space in ALL_SPACES:
+            if self._spaces[space] == BLANK:
+                self._spaces[space] == '.'
+        boardStr = f'''
+            {self._spaces['1']}{self._spaces['2']}{self._spaces['3']} 123
+            {self._spaces['4']}{self._spaces['5']}{self._spaces['6']} 456
+            {self._spaces['7']}{self._spaces['8']}{self._spaces['9']} 789'''
+
+        # Change '.' back to blank spaces.
+        for space in ALL_SPACES:
+            if self._spaces[space] == '.':
+                self._spaces[space] = BLANK
+        return boardStr
