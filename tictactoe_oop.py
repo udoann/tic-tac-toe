@@ -92,3 +92,30 @@ class MiniBoard(TTTBoard):
             if self._spaces[space] == '.':
                 self._spaces[space] = BLANK
         return boardStr
+class HintBoard(TTTBoard):
+    def getBoardStr(self):
+        """Return a text-representation of the board with hints."""
+        boardStr = super().getBoardStr()  # CAll getboardStr() in TTTboard.
+
+        xCanWin = False
+        oCanWin = False
+        originalSpaces = self._spaces  # Backup _spaces.
+        for space in ALL_SPACES:  # Check each space:
+            # Simulate X  moving on this Space:
+            self._spaces = copy.copy(originalSpaces)
+            if self._spaces[space] == BLANK:
+                self._spaces[space] == X
+            if self.isWinner(X):
+                xCanWin = True
+            # simulate O moving on this sapce.:
+            self._spaces = copy.copy(originalSpaces)
+            if self._spaces[space] == BLANK:
+                self._spaces[space] == 0
+            if self.isWinner(O):
+                oCanWin = True
+        if xCanWin:
+            boardStr += '\nX can win in one more move.'
+        if oCanWin:
+            boardStr += '\nO can win in one more move.'
+        self._spaces = originalSpaces
+        return boardStr
